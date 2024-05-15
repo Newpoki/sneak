@@ -5,6 +5,8 @@ import { Board } from './board/board'
 import { getFruitRandomCoordinates } from './game-utils'
 import { useGame } from './use-game'
 import { PauseDialog } from './pause-dialog'
+import { GameOverDialog } from './game-over-dialog'
+import { useRouter } from 'next/navigation'
 
 const getInitialCoordinates = () => {
     const snakeCoordinates = [
@@ -21,19 +23,32 @@ const getInitialCoordinates = () => {
 export default function Game() {
     const [isMounted, setIsMounted] = useState(false)
 
+    const router = useRouter()
+
     const { snake: initialSnakeCoordinates, fruit: initialFruitCoordinates } =
         getInitialCoordinates()
 
-    const { fruitCoordinates, snakeCoordinates, direction, score, isPaused, setIsPaused } = useGame(
-        {
-            initialFruitCoordinates,
-            initialSnakeCoordinates,
-        }
-    )
+    const {
+        fruitCoordinates,
+        snakeCoordinates,
+        direction,
+        score,
+        isPaused,
+        setIsPaused,
+        isGameOver,
+        onReset,
+    } = useGame({
+        initialFruitCoordinates,
+        initialSnakeCoordinates,
+    })
 
     const handleResumeGame = useCallback(() => {
         setIsPaused(false)
     }, [setIsPaused])
+
+    const handleGoToHome = useCallback(() => {
+        router.push('/')
+    }, [router])
 
     useEffect(() => {
         setIsMounted(true)
@@ -56,6 +71,12 @@ export default function Game() {
             <h3 className="text-3xl">Score: {score}</h3>
 
             <PauseDialog isOpen={isPaused} onResume={handleResumeGame} />
+            <GameOverDialog
+                isOpen={isGameOver}
+                score={score}
+                onTryAgain={onReset}
+                onQuit={handleGoToHome}
+            />
         </section>
     )
 }

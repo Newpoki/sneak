@@ -86,6 +86,17 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         setSnakeCoordinates([newHeadCoordinates, ...snakeCoordinates.slice(0, -1)])
     }, [snakeCoordinates, direction, fruitCoordinates.x, fruitCoordinates.y, handleEatFruit])
 
+    // Reset all states but the fruit coordinate to their initial state
+    // We want a different fruit coordinate when the game restarts
+    const handleReset = useCallback(() => {
+        setIsGameOver(false)
+        setIsPaused(false)
+        setSnakeCoordinates(initialSnakeCoordinates)
+        setFruitCoordinates(getFruitRandomCoordinates(initialSnakeCoordinates))
+        setScore(0)
+        setDirection('RIGHT')
+    }, [initialSnakeCoordinates])
+
     useEffect(() => {
         const registerMovements = (event: DocumentEventMap['keydown']) => {
             switch (event.key) {
@@ -159,5 +170,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         score,
         isPaused,
         setIsPaused,
+        isGameOver,
+        onReset: handleReset,
     }
 }

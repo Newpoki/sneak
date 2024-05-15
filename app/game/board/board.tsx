@@ -2,20 +2,22 @@
 
 import { Fruit } from '../fruit'
 import { Snake } from '../snake/snake'
-import { useSnake } from '../snake/use-snake'
+import { Coordinate } from '../snake/snake-types'
 import { useGame } from '../use-game'
 import { BOARD_COLUMN_NUMBER, BOARD_COLUMN_SIZE } from './board-constants'
 
 const MAP_SIZE = BOARD_COLUMN_NUMBER * BOARD_COLUMN_SIZE
 
-export const Board = () => {
-    const { isGameOver, setIsGameOver, fruitCoordinates } = useGame()
+type BoardProps = {
+    initialSnakeCoordinates: Array<Coordinate>
+    initialFruitCoordinates: Coordinate
+}
 
-    const handleGameOver = () => {
-        setIsGameOver(true)
-    }
-
-    const { coordinates: snakeCoordinates } = useSnake({ onGameOver: handleGameOver, isGameOver })
+export const Board = ({ initialFruitCoordinates, initialSnakeCoordinates }: BoardProps) => {
+    const { fruitCoordinates, snakeCoordinates } = useGame({
+        initialFruitCoordinates,
+        initialSnakeCoordinates,
+    })
 
     return (
         <div

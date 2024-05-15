@@ -1,9 +1,9 @@
-import { Board } from './game/board/board'
+import { Game } from './game/game'
 
 export default function Home() {
     return (
         <main>
-            <Board />
+            <Game />
         </main>
     )
 }

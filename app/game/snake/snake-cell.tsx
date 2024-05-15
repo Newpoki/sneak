@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils'
 import { Coordinate, Direction } from './snake-types'
-import { BOARD_COLUMN_SIZE } from '../board/board-constants'
-import { getPositionFromCoordinates } from '../game-utils'
+import { Cell } from '../cell'
 
 type SnakeCellPropos = {
     coordinate: Coordinate
@@ -11,26 +10,20 @@ type SnakeCellPropos = {
 
 export const SnakeCell = ({ coordinate, isHeadCell, direction }: SnakeCellPropos) => {
     return (
-        <div
-            className={cn('absolute flex bg-slate-300', {
-                'bg-slate-400': isHeadCell,
-            })}
-            style={{
-                height: BOARD_COLUMN_SIZE,
-                width: BOARD_COLUMN_SIZE,
-                ...getPositionFromCoordinates(coordinate.x, coordinate.y),
-            }}
+        <Cell
+            coordinate={coordinate}
+            className={cn('bg-green-300', { 'bg-green-500': isHeadCell })}
         >
             {isHeadCell && (
                 <div
                     className={cn('relative flex w-full justify-center gap-2 py-1', {
-                        'mt-auto': direction === 'BOTTOM',
+                        'items-end': direction === 'BOTTOM',
                     })}
                 >
-                    <div className="h-3 w-1 rounded-full bg-black " />
-                    <div className="h-3 w-1 rounded-full bg-black " />
+                    <div className="h-1/3 w-1/12 rounded-full bg-black " />
+                    <div className="h-1/3 w-1/12 rounded-full bg-black " />
                 </div>
             )}
-        </div>
+        </Cell>
     )
 }

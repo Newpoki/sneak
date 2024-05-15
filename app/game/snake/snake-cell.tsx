@@ -4,11 +4,15 @@ import { Cell } from '../cell'
 
 type SnakeCellPropos = {
     coordinate: Coordinate
-    isHeadCell: boolean
-    direction: Direction
+    isHeadCell?: boolean
+    direction?: Direction
 }
 
-export const SnakeCell = ({ coordinate, isHeadCell, direction }: SnakeCellPropos) => {
+export const SnakeCell = ({
+    coordinate,
+    isHeadCell = false,
+    direction = 'UP',
+}: SnakeCellPropos) => {
     return (
         <Cell
             coordinate={coordinate}

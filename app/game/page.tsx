@@ -17,7 +17,7 @@ const getInitialCoordinates = () => {
     }
 }
 
-export const Game = () => {
+export default function Game() {
     const [isMounted, setIsMounted] = useState(false)
 
     const { snake: initialSnakeCoordinates, fruit: initialFruitCoordinates } =

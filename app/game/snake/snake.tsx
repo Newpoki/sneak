@@ -1,29 +1,23 @@
-import { cn } from '@/lib/utils'
-import { Coordinate } from './snake-types'
-import { BOARD_COLUMN_SIZE } from '../board/board-constants'
-import { getPositionFromCoordinates } from '../game-utils'
+import { Coordinate, Direction } from './snake-types'
+import { SnakeCell } from './snake-cell'
 
 type SnakeProps = {
     coordinates: Array<Coordinate>
+    direction: Direction
 }
 
-export const Snake = ({ coordinates }: SnakeProps) => {
+export const Snake = ({ coordinates, direction }: SnakeProps) => {
     return (
         <>
             {coordinates.map((coordinate, index) => {
                 const isHeadCell = index === 0
 
                 return (
-                    <div
+                    <SnakeCell
+                        isHeadCell={isHeadCell}
                         key={`${coordinate.x}-${coordinate.y}`}
-                        className={cn('absolute bg-slate-300', {
-                            'bg-slate-400': isHeadCell,
-                        })}
-                        style={{
-                            height: BOARD_COLUMN_SIZE,
-                            width: BOARD_COLUMN_SIZE,
-                            ...getPositionFromCoordinates(coordinate.x, coordinate.y),
-                        }}
+                        coordinate={coordinate}
+                        direction={direction}
                     />
                 )
             })}

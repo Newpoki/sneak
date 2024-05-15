@@ -10,6 +10,7 @@ type UseGameProps = {
 
 export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: UseGameProps) => {
     const [isGameOver, setIsGameOver] = useState(false)
+    const [isPaused, setIsPaused] = useState(false)
     const [snakeCoordinates, setSnakeCoordinates] = useState(initialSnakeCoordinates)
     const [fruitCoordinates, setFruitCoordinates] = useState(initialFruitCoordinates)
 
@@ -125,7 +126,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
 
     useEffect(() => {
         const gameTick = setInterval(() => {
-            if (isGameOver) {
+            if (isGameOver || isPaused) {
                 return
             }
 
@@ -135,10 +136,11 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         return () => {
             clearInterval(gameTick)
         }
-    }, [isGameOver, moveSnake])
+    }, [isGameOver, isPaused, moveSnake])
 
     return {
         fruitCoordinates,
         snakeCoordinates,
+        direction,
     }
 }

@@ -14,7 +14,7 @@ type BoardProps = {
 }
 
 export const Board = ({ initialFruitCoordinates, initialSnakeCoordinates }: BoardProps) => {
-    const { fruitCoordinates, snakeCoordinates } = useGame({
+    const { fruitCoordinates, snakeCoordinates, direction } = useGame({
         initialFruitCoordinates,
         initialSnakeCoordinates,
     })
@@ -24,7 +24,7 @@ export const Board = ({ initialFruitCoordinates, initialSnakeCoordinates }: Boar
             className="relative mx-auto bg-slate-800"
             style={{ width: MAP_SIZE, height: MAP_SIZE }}
         >
-            <Snake coordinates={snakeCoordinates} />
+            <Snake coordinates={snakeCoordinates} direction={direction} />
             <Fruit coordinate={fruitCoordinates} />
         </div>
     )

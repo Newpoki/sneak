@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { BOARD_COLUMN_SIZE } from './game/board/board-constants'
 import { SnakeCell } from './game/snake/snake-cell'
 
@@ -21,7 +22,9 @@ export default function Home() {
                 <SnakeCell isHeadCell coordinate={{ x: 0, y: 4 }} />
             </section>
 
-            <h1 className="text-5xl font-bold uppercase">Sneak</h1>
+            <h1 className="text-accent text-5xl font-bold uppercase">Sneak</h1>
+
+            <Button>Play</Button>
         </main>
     )
 }

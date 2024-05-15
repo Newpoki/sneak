@@ -40,13 +40,13 @@ export default function Game() {
     }
 
     return (
-        <section className="flex flex-1 flex-col items-center justify-center gap-2">
+        <section className="flex flex-1 flex-col items-center justify-center gap-6 bg-slate-500 p-4">
             <Board
                 direction={direction}
                 fruitCoordinates={fruitCoordinates}
                 snakeCoordinates={snakeCoordinates}
             />
-            <p>Score: {score}</p>
+            <h3 className="text-3xl">Score: {score}</h3>
         </section>
     )
 }

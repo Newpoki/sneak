@@ -14,7 +14,7 @@ type BoardProps = {
 export const Board = ({ snakeCoordinates, direction, fruitCoordinates }: BoardProps) => {
     return (
         <div
-            className="relative mx-auto bg-slate-800"
+            className="relative mx-auto box-content rounded-md border-2 border-white bg-slate-800"
             style={{ width: MAP_SIZE, height: MAP_SIZE }}
         >
             <Snake coordinates={snakeCoordinates} direction={direction} />

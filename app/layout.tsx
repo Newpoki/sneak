@@ -17,7 +17,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={cn('dark bg-background font-sans antialiased', jost.variable)}>
+            <body
+                className={cn(
+                    'dark flex h-[100dvh] flex-col bg-background font-sans antialiased',
+                    jost.variable
+                )}
+            >
                 {children}
             </body>
         </html>

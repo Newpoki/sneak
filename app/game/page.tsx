@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Board } from './board/board'
 import { getFruitRandomCoordinates } from './game-utils'
 import { useGame } from './use-game'
+import { PauseDialog } from './pause-dialog'
 
 const getInitialCoordinates = () => {
     const snakeCoordinates = [
@@ -23,10 +24,16 @@ export default function Game() {
     const { snake: initialSnakeCoordinates, fruit: initialFruitCoordinates } =
         getInitialCoordinates()
 
-    const { fruitCoordinates, snakeCoordinates, direction, score } = useGame({
-        initialFruitCoordinates,
-        initialSnakeCoordinates,
-    })
+    const { fruitCoordinates, snakeCoordinates, direction, score, isPaused, setIsPaused } = useGame(
+        {
+            initialFruitCoordinates,
+            initialSnakeCoordinates,
+        }
+    )
+
+    const handleResumeGame = useCallback(() => {
+        setIsPaused(false)
+    }, [setIsPaused])
 
     useEffect(() => {
         setIsMounted(true)
@@ -47,6 +54,8 @@ export default function Game() {
                 snakeCoordinates={snakeCoordinates}
             />
             <h3 className="text-3xl">Score: {score}</h3>
+
+            <PauseDialog isOpen={isPaused} onResume={handleResumeGame} />
         </section>
     )
 }

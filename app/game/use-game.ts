@@ -123,12 +123,20 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
             }
         }
 
+        const registerPause = (event: DocumentEventMap['keydown']) => {
+            if (event.key === 'Escape' && !isPaused) {
+                setIsPaused((prevIsPaused) => !prevIsPaused)
+            }
+        }
+
         document.addEventListener('keydown', registerMovements)
+        document.addEventListener('keydown', registerPause)
 
         return () => {
             document.removeEventListener('keydown', registerMovements)
+            document.removeEventListener('keydown', registerPause)
         }
-    }, [direction])
+    }, [direction, isPaused])
 
     useEffect(() => {
         const gameTick = setInterval(() => {
@@ -149,5 +157,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         snakeCoordinates,
         direction,
         score,
+        isPaused,
+        setIsPaused,
     }
 }

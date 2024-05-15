@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { Direction } from './snake-types'
 import { BOARD_COLUMN_NUMBER } from '../board/board-constants'
 
-export const useSnake = () => {
+type UseSnakeProps = {
+    onGameOver: () => void
+    isGameOver: boolean
+}
+
+export const useSnake = ({ onGameOver, isGameOver }: UseSnakeProps) => {
     const [direction, setDirection] = useState<Direction>('RIGHT')
     const [coordinates, setCoordinates] = useState([
         { x: 4, y: 4 },
@@ -46,12 +51,15 @@ export const useSnake = () => {
                 coordinate.x === newHeadCoordinates.x && coordinate.y === newHeadCoordinates.y
         )
 
+        // We want to stop the game if the snake is exceeding the board boundaries or eating itself
         if (isExceedingBoardBoundaries || isEatingItself) {
-            throw new Error('GG EZ')
+            onGameOver()
+            return
         }
 
+        // If everything is ok, we move the snake
         setCoordinates([newHeadCoordinates, ...coordinates.slice(0, -1)])
-    }, [coordinates, direction])
+    }, [coordinates, direction, onGameOver])
 
     useEffect(() => {
         const registerMovements = (event: DocumentEventMap['keydown']) => {
@@ -99,13 +107,17 @@ export const useSnake = () => {
 
     useEffect(() => {
         const gameTick = setInterval(() => {
+            if (isGameOver) {
+                return
+            }
+
             moveSnake()
         }, 100)
 
         return () => {
             clearInterval(gameTick)
         }
-    }, [moveSnake])
+    }, [isGameOver, moveSnake])
 
     return {
         coordinates,

@@ -1,13 +1,7 @@
 import { cn } from '@/lib/utils'
 import { Coordinate } from './snake-types'
 import { BOARD_COLUMN_SIZE } from '../board/board-constants'
-
-const getPositionFromCoordinates = (x: number, y: number) => {
-    return {
-        left: x * BOARD_COLUMN_SIZE,
-        top: y * BOARD_COLUMN_SIZE,
-    }
-}
+import { getPositionFromCoordinates } from '../game-utils'
 
 type SnakeProps = {
     coordinates: Array<Coordinate>

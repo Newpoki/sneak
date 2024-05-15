@@ -1,9 +1,9 @@
-import Image from 'next/image'
+import { Board } from './game/board/board'
 
 export default function Home() {
     return (
         <main>
-            <p>home</p>
+            <Board />
         </main>
     )
 }

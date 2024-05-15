@@ -1,24 +1,17 @@
-'use client'
-
 import { Fruit } from '../fruit'
 import { Snake } from '../snake/snake'
-import { Coordinate } from '../snake/snake-types'
-import { useGame } from '../use-game'
+import { Coordinate, Direction } from '../snake/snake-types'
 import { BOARD_COLUMN_NUMBER, BOARD_COLUMN_SIZE } from './board-constants'
 
 const MAP_SIZE = BOARD_COLUMN_NUMBER * BOARD_COLUMN_SIZE
 
 type BoardProps = {
-    initialSnakeCoordinates: Array<Coordinate>
-    initialFruitCoordinates: Coordinate
+    snakeCoordinates: Array<Coordinate>
+    direction: Direction
+    fruitCoordinates: Coordinate
 }
 
-export const Board = ({ initialFruitCoordinates, initialSnakeCoordinates }: BoardProps) => {
-    const { fruitCoordinates, snakeCoordinates, direction } = useGame({
-        initialFruitCoordinates,
-        initialSnakeCoordinates,
-    })
-
+export const Board = ({ snakeCoordinates, direction, fruitCoordinates }: BoardProps) => {
     return (
         <div
             className="relative mx-auto bg-slate-800"

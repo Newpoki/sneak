@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Coordinate, Direction } from './snake/snake-types'
 import { BOARD_COLUMN_NUMBER } from './board/board-constants'
 import { getFruitRandomCoordinates } from './game-utils'
+import { FRUITS_SCORE } from './game-constants'
 
 type UseGameProps = {
     initialSnakeCoordinates: Coordinate[]
@@ -13,15 +14,23 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
     const [isPaused, setIsPaused] = useState(false)
     const [snakeCoordinates, setSnakeCoordinates] = useState(initialSnakeCoordinates)
     const [fruitCoordinates, setFruitCoordinates] = useState(initialFruitCoordinates)
+    const [score, setScore] = useState(0)
 
     const [direction, setDirection] = useState<Direction>('RIGHT')
 
-    // Generate the new fruit coordinates when the snake eats the fruit, excluding the snake's current coordinates
-    const handleEatFruit = useCallback((snakeCoordinates: Coordinate[]) => {
-        const newFruitCoordinates = getFruitRandomCoordinates(snakeCoordinates)
+    // When the snake eats a fruit, we need to add a new cell to the snake, generate a new fruit and increase the score
+    const handleEatFruit = useCallback(
+        (newHeadCoordinates: Coordinate) => {
+            const newSnakeCoordinates = [newHeadCoordinates, ...snakeCoordinates]
 
-        setFruitCoordinates(newFruitCoordinates)
-    }, [])
+            const newFruitCoordinates = getFruitRandomCoordinates(snakeCoordinates)
+
+            setSnakeCoordinates(newSnakeCoordinates)
+            setFruitCoordinates(newFruitCoordinates)
+            setScore((prevScore) => prevScore + FRUITS_SCORE)
+        },
+        [snakeCoordinates]
+    )
 
     /**
      * Moving the snake is basically moving the head to the direction and removing the last cell
@@ -69,10 +78,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
             newHeadCoordinates.y === fruitCoordinates.y
 
         if (isNowEatingFruit) {
-            const newSnakeCoordinates = [newHeadCoordinates, ...snakeCoordinates]
-
-            setSnakeCoordinates(newSnakeCoordinates)
-            handleEatFruit(newSnakeCoordinates)
+            handleEatFruit(newHeadCoordinates)
 
             return
         }
@@ -142,5 +148,6 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         fruitCoordinates,
         snakeCoordinates,
         direction,
+        score,
     }
 }

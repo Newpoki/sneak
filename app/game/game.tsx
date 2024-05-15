@@ -1,11 +1,15 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Board } from './board/board'
 import { getFruitRandomCoordinates } from './game-utils'
+import { useGame } from './use-game'
 
 const getInitialCoordinates = () => {
     const snakeCoordinates = [
-        { x: 4, y: 4 },
         { x: 3, y: 4 },
         { x: 2, y: 4 },
+        { x: 1, y: 4 },
     ]
     return {
         snake: snakeCoordinates,
@@ -14,13 +18,35 @@ const getInitialCoordinates = () => {
 }
 
 export const Game = () => {
+    const [isMounted, setIsMounted] = useState(false)
+
     const { snake: initialSnakeCoordinates, fruit: initialFruitCoordinates } =
         getInitialCoordinates()
 
+    const { fruitCoordinates, snakeCoordinates, direction, score } = useGame({
+        initialFruitCoordinates,
+        initialSnakeCoordinates,
+    })
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    // We don't want to display the game if it's not mounted
+    // Otherwise we can have hydratation issues with the fruit initial coordinates
+    if (isMounted === false) {
+        // TODO: Display a cool loader
+        return null
+    }
+
     return (
-        <Board
-            initialSnakeCoordinates={initialSnakeCoordinates}
-            initialFruitCoordinates={initialFruitCoordinates}
-        />
+        <section className="flex flex-1 flex-col items-center justify-center gap-2">
+            <Board
+                direction={direction}
+                fruitCoordinates={fruitCoordinates}
+                snakeCoordinates={snakeCoordinates}
+            />
+            <p>Score: {score}</p>
+        </section>
     )
 }

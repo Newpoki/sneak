@@ -20,7 +20,7 @@ export const Cell = ({ children, className, coordinate }: CellProps) => {
             className="absolute flex items-center justify-center"
         >
             <div
-                className={cn('absolute flex h-full w-full rounded-md', className)}
+                className={cn('absolute flex h-full w-full rounded-sm', className)}
                 style={{ height: BOARD_COLUMN_SIZE - 4, width: BOARD_COLUMN_SIZE - 4 }}
             >
                 {children}

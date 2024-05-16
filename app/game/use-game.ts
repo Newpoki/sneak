@@ -97,6 +97,14 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         setDirection('RIGHT')
     }, [initialSnakeCoordinates])
 
+    const handlePauseGame = useCallback(() => {
+        setIsPaused(true)
+    }, [setIsPaused])
+
+    const handleResumeGame = useCallback(() => {
+        setIsPaused(false)
+    }, [setIsPaused])
+
     useEffect(() => {
         const registerMovements = (event: DocumentEventMap['keydown']) => {
             switch (event.key) {
@@ -155,7 +163,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
                 return
             }
 
-            moveSnake()
+            // moveSnake()
         }, 100)
 
         return () => {
@@ -169,8 +177,9 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         direction,
         score,
         isPaused,
-        setIsPaused,
         isGameOver,
         onReset: handleReset,
+        onPause: handlePauseGame,
+        onResume: handleResumeGame,
     }
 }

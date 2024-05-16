@@ -7,6 +7,7 @@ import { useGame } from './use-game'
 import { PauseDialog } from './pause-dialog'
 import { GameOverDialog } from './game-over-dialog'
 import { useRouter } from 'next/navigation'
+import { PauseCircle } from 'lucide-react'
 
 const getInitialCoordinates = () => {
     const snakeCoordinates = [
@@ -34,17 +35,14 @@ export default function Game() {
         direction,
         score,
         isPaused,
-        setIsPaused,
         isGameOver,
         onReset,
+        onResume,
+        onPause,
     } = useGame({
         initialFruitCoordinates,
         initialSnakeCoordinates,
     })
-
-    const handleResumeGame = useCallback(() => {
-        setIsPaused(false)
-    }, [setIsPaused])
 
     const handleGoToHome = useCallback(() => {
         router.push('/')
@@ -62,7 +60,11 @@ export default function Game() {
     }
 
     return (
-        <section className="flex flex-1 flex-col items-center justify-center gap-6 bg-slate-500 p-4">
+        <section className="relative flex flex-1 flex-col items-center justify-center gap-6 bg-slate-500 p-4">
+            <button className="absolute left-4 top-4" onClick={onPause} type="button">
+                <PauseCircle className="h-10 w-10 " />
+            </button>
+
             <Board
                 direction={direction}
                 fruitCoordinates={fruitCoordinates}
@@ -70,7 +72,7 @@ export default function Game() {
             />
             <h3 className="text-3xl">Score: {score}</h3>
 
-            <PauseDialog isOpen={isPaused} onResume={handleResumeGame} />
+            <PauseDialog isOpen={isPaused} onResume={onResume} />
             <GameOverDialog
                 isOpen={isGameOver}
                 score={score}

@@ -3,6 +3,7 @@ import { Coordinate, Direction } from './snake/snake-types'
 import { BOARD_COLUMN_NUMBER } from './board/board-constants'
 import { getFruitRandomCoordinates } from './game-utils'
 import { FRUITS_SCORE } from './game-constants'
+import { GameStatus } from './game-types'
 
 type UseGameProps = {
     initialSnakeCoordinates: Coordinate[]
@@ -10,8 +11,7 @@ type UseGameProps = {
 }
 
 export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: UseGameProps) => {
-    const [isGameOver, setIsGameOver] = useState(false)
-    const [isPaused, setIsPaused] = useState(false)
+    const [gameStatus, setGameStatus] = useState<GameStatus>('STARTING')
     const [snakeCoordinates, setSnakeCoordinates] = useState(initialSnakeCoordinates)
     const [fruitCoordinates, setFruitCoordinates] = useState(initialFruitCoordinates)
     const [score, setScore] = useState(0)
@@ -69,7 +69,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
 
         // We want to stop the game if the snake is exceeding the board boundaries or eating itself
         if (isExceedingBoardBoundaries || isEatingItself) {
-            setIsGameOver(true)
+            setGameStatus('GAME_OVER')
             return
         }
 
@@ -89,8 +89,7 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
     // Reset all states but the fruit coordinate to their initial state
     // We want a different fruit coordinate when the game restarts
     const handleReset = useCallback(() => {
-        setIsGameOver(false)
-        setIsPaused(false)
+        setGameStatus('STARTING')
         setSnakeCoordinates(initialSnakeCoordinates)
         setFruitCoordinates(getFruitRandomCoordinates(initialSnakeCoordinates))
         setScore(0)
@@ -98,12 +97,16 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
     }, [initialSnakeCoordinates])
 
     const handlePauseGame = useCallback(() => {
-        setIsPaused(true)
-    }, [setIsPaused])
+        setGameStatus('PAUSED')
+    }, [])
 
     const handleResumeGame = useCallback(() => {
-        setIsPaused(false)
-    }, [setIsPaused])
+        setGameStatus('RUNNING')
+    }, [])
+
+    const handleStartGame = useCallback(() => {
+        setGameStatus('RUNNING')
+    }, [])
 
     useEffect(() => {
         const registerMovements = (event: DocumentEventMap['keydown']) => {
@@ -143,8 +146,8 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
         }
 
         const registerPause = (event: DocumentEventMap['keydown']) => {
-            if (event.key === 'Escape' && !isPaused) {
-                setIsPaused((prevIsPaused) => !prevIsPaused)
+            if (event.key === 'Escape' && gameStatus === 'RUNNING') {
+                setGameStatus('PAUSED')
             }
         }
 
@@ -155,31 +158,31 @@ export const useGame = ({ initialSnakeCoordinates, initialFruitCoordinates }: Us
             document.removeEventListener('keydown', registerMovements)
             document.removeEventListener('keydown', registerPause)
         }
-    }, [direction, isPaused])
+    }, [direction, gameStatus])
 
     useEffect(() => {
         const gameTick = setInterval(() => {
-            if (isGameOver || isPaused) {
+            if (gameStatus !== 'RUNNING') {
                 return
             }
 
-            // moveSnake()
+            moveSnake()
         }, 100)
 
         return () => {
             clearInterval(gameTick)
         }
-    }, [isGameOver, isPaused, moveSnake])
+    }, [gameStatus, moveSnake])
 
     return {
         fruitCoordinates,
         snakeCoordinates,
         direction,
         score,
-        isPaused,
-        isGameOver,
+        gameStatus,
         onReset: handleReset,
         onPause: handlePauseGame,
         onResume: handleResumeGame,
+        onStart: handleStartGame,
     }
 }

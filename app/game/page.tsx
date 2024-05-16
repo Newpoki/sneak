@@ -34,11 +34,11 @@ export default function Game() {
         snakeCoordinates,
         direction,
         score,
-        isPaused,
-        isGameOver,
+        gameStatus,
         onReset,
         onResume,
         onPause,
+        onStart,
     } = useGame({
         initialFruitCoordinates,
         initialSnakeCoordinates,
@@ -69,12 +69,14 @@ export default function Game() {
                 direction={direction}
                 fruitCoordinates={fruitCoordinates}
                 snakeCoordinates={snakeCoordinates}
+                gameStatus={gameStatus}
+                onStart={onStart}
             />
             <h3 className="text-3xl">Score: {score}</h3>
 
-            <PauseDialog isOpen={isPaused} onResume={onResume} />
+            <PauseDialog isOpen={gameStatus === 'PAUSED'} onResume={onResume} />
             <GameOverDialog
-                isOpen={isGameOver}
+                isOpen={gameStatus === 'GAME_OVER'}
                 score={score}
                 onTryAgain={onReset}
                 onQuit={handleGoToHome}
